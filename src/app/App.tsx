@@ -1,10 +1,8 @@
-import React from 'react';
-import 'app/App.scss';
+import React from 'react'
+import 'app/App.scss'
+import { Pages } from 'pages'
 
 export const App = () => {
-  return (
-    <div>
 
-    </div>
-  );
+	return <Pages />
 }
