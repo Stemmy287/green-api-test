@@ -1,0 +1,31 @@
+@import "common/styles/mixins";
+@import "common/styles/variables";
+
+.container {
+  position: relative;
+  .title {
+    @include text(400, 14px, 24px, $dark200);
+  }
+
+  .input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $dark100;
+    @include text(400, 16px, 24px);
+    outline: none;
+    padding: 0 0 2px 0;
+    width: 100%;
+
+    &:hover {
+      border-bottom: 1px solid $dark200;
+    }
+    &:focus {
+      border-bottom: 1px solid $dark200;
+    }
+  }
+
+  .error {
+    @include text(14px, 400, 24px, $red100);
+  }
+}
+
