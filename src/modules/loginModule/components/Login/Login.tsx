@@ -1,17 +1,19 @@
 import React from 'react'
 import s from './Login.module.scss'
-import { Input } from 'common/components'
-import { Button } from 'common/components'
+import { Button, Input } from 'common/components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { InstanceDataType } from 'modules/loginModule'
-import { useAppDispatch } from 'hooks'
-import { setInstanceData } from 'modules/loginModule'
+import { instanceDataSelector, InstanceDataType, setInstanceData } from 'modules/loginModule'
+import { useAppDispatch, useAppSelector } from 'hooks'
+import { PATH } from 'common/constants'
+import { Navigate } from 'react-router-dom'
 
 export const Login = () => {
 
 	const dispatch = useAppDispatch()
+
+	const instanceData = useAppSelector(instanceDataSelector)
 
 	const schema = yup.object().shape({
 		idInstance: yup.string().required('field required'),
@@ -27,6 +29,10 @@ export const Login = () => {
 	})
 	const onSubmit: SubmitHandler<InstanceDataType> = data => {
 		dispatch(setInstanceData(data))
+	}
+
+	if (instanceData) {
+		return <Navigate to={PATH.CHATS}/>
 	}
 
 	return (
