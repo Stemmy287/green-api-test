@@ -1,1 +1,5 @@
 export * from 'modules/chatsModule/components/Chats/Chats'
+export * from 'modules/chatsModule/chatsApi'
+export * from 'modules/chatsModule/chatsSlice'
+export * from 'modules/chatsModule/types'
+export * from 'modules/chatsModule/chatsSelectors'
