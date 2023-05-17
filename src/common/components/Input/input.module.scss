@@ -27,5 +27,18 @@
   .error {
     @include text(14px, 400, 24px, $red100);
   }
+
+  .allBorder {
+    border: 1px solid $dark100;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 3px;
+    &:hover {
+      border: 1px solid $dark200;
+    }
+    &:focus {
+      border: 1px solid $dark200;
+    }
+  }
 }
 
