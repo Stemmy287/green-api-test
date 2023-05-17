@@ -1,0 +1,1 @@
+export * from 'modules/chatsModule/components/Chats/Chats'
