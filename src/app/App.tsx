@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import 'app/App.scss'
+import './App.scss'
 import { Pages } from 'pages'
 import { useAppDispatch, useAppSelector } from 'hooks'
-import { isInitializedSelector, setIsInitialized } from 'app'
-import { Preloader } from 'common/components/Preloader/Preloader'
-import { loginTC } from 'modules/loginModule'
+import { isInitializedSelector } from 'app/appSelectors'
+import { setIsInitialized } from 'app/appSlice'
+import { Preloader } from 'common/components'
+import { login } from 'modules/loginModule'
 
 export const App = () => {
 
@@ -15,7 +16,7 @@ export const App = () => {
 	useEffect(() => {
 		const instanceData = localStorage.getItem('instanceData')
 		if (instanceData) {
-			dispatch(loginTC(JSON.parse(instanceData)))
+			dispatch(login(JSON.parse(instanceData)))
 		} else {
 			dispatch(setIsInitialized())
 		}
