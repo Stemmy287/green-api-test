@@ -1,13 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { chatsApi, MessageType } from 'modules/chatsModule'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { chatsApi, ChatType } from 'modules/chatsModule'
 import { AppRootStateType } from 'store'
 import { InstanceDataType } from 'modules/loginModule'
-import { ChatType } from 'modules/chatsModule'
 import { loadFromLocalStorage } from 'common/utils'
 
 
-export const createChatTC = createAsyncThunk('chats/createChatTC', async (param: number, {
-	dispatch,
+export const createChat = createAsyncThunk('chats/createChatTC', async (param: number, {
 	rejectWithValue,
 	getState
 }) => {
@@ -18,7 +16,9 @@ export const createChatTC = createAsyncThunk('chats/createChatTC', async (param:
 	try {
 		const res = await chatsApi.checkNumber(param, instanceData)
 		if (res.existsWhatsapp) {
-			dispatch(addChat(param))
+			return param
+		} else {
+			return rejectWithValue(false)
 		}
 	} catch (e) {
 		return rejectWithValue(false)
@@ -26,7 +26,6 @@ export const createChatTC = createAsyncThunk('chats/createChatTC', async (param:
 })
 
 export const fetchMessages = createAsyncThunk('chats/fetchMessages', async (param: string, {
-	dispatch,
 	rejectWithValue,
 	getState
 }) => {
@@ -36,12 +35,10 @@ export const fetchMessages = createAsyncThunk('chats/fetchMessages', async (para
 
 	try {
 		const res = await chatsApi.fetchMessages(param + '@c.us', instanceData)
-		dispatch(addCurrentChat({phoneNumber: param, messages: res.reverse()}))
-
+		return { phoneNumber: param, messages: res.reverse() }
 	} catch (e) {
 		return rejectWithValue(null)
 	}
-
 })
 
 const chats = loadFromLocalStorage('chats') || []
@@ -52,16 +49,15 @@ export const slice = createSlice({
 		chats: chats as ChatType[],
 		currentChat: {} as ChatType
 	},
-	reducers: {
-		addChat(state, action: PayloadAction<number>) {
-			state.chats.unshift({phoneNumber: action.payload, messages: []})
+	reducers: {},
+	extraReducers: (builder) => {
+		builder.addCase(createChat.fulfilled, (state, action) => {
+			state.chats.unshift({ phoneNumber: action.payload, messages: [] })
 			localStorage.setItem('chats', JSON.stringify(state.chats))
-		},
-		addCurrentChat(state, action: PayloadAction<{phoneNumber: string, messages: MessageType[]}>) {
-			state.currentChat = {phoneNumber: +action.payload.phoneNumber, messages: action.payload.messages}
-		}
+		})
+		builder.addCase(fetchMessages.fulfilled, (state, action) => {
+			state.currentChat = { phoneNumber: +action.payload.phoneNumber, messages: action.payload.messages }
+		})
 	}
 })
-
-export const {addChat, addCurrentChat} = slice.actions
 export const chatsSlice = slice.reducer

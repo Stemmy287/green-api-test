@@ -1,0 +1,11 @@
+@import "common/styles/mixins.scss";
+@import "common/styles/variables.scss";
+
+.container {
+  display: flex;
+  position: relative;
+  width: 1300px;
+  box-shadow: 0 17px 50px 0 rgba(11, 20, 26, .19), 0 12px 15px 0 rgba(11, 20, 26, .24);
+  background-color: $light100;
+  height: 700px;
+}

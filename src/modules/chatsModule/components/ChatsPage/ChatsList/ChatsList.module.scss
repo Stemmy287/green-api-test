@@ -1,0 +1,13 @@
+@import "common/styles/mixins.scss";
+@import "common/styles/variables.scss";
+
+.chats {
+  width: 29%;
+  border-right: 1px solid $dark100;
+  .addChat {
+    padding: 5px;
+    display: flex;
+    column-gap: 10px;
+    border-bottom: 1px solid $dark100;
+  }
+}
