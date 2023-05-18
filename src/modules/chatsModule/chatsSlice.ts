@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { chatsApi, ChatType } from 'modules/chatsModule'
+import { chatsApi, ChatType, SendMessageType } from 'modules/chatsModule'
 import { AppRootStateType } from 'store'
 import { InstanceDataType } from 'modules/loginModule'
 import { loadFromLocalStorage } from 'common/utils'
 
 
-export const createChat = createAsyncThunk('chats/createChatTC', async (param: number, {
+export const createChat = createAsyncThunk('chats/createChat', async (param: number, {
 	rejectWithValue,
 	getState
 }) => {
@@ -20,7 +20,7 @@ export const createChat = createAsyncThunk('chats/createChatTC', async (param: n
 		} else {
 			return rejectWithValue(false)
 		}
-	} catch (e) {
+	} catch (err) {
 		return rejectWithValue(false)
 	}
 })
@@ -36,8 +36,23 @@ export const fetchMessages = createAsyncThunk('chats/fetchMessages', async (para
 	try {
 		const res = await chatsApi.fetchMessages(param + '@c.us', instanceData)
 		return { phoneNumber: param, messages: res.reverse() }
-	} catch (e) {
+	} catch (err) {
 		return rejectWithValue(null)
+	}
+})
+
+export const sendMessage = createAsyncThunk('chats/sendMessage', async (param: SendMessageType, {
+	rejectWithValue,
+	getState
+}) => {
+	const state = getState() as AppRootStateType
+	const instanceData = state.login.instanceData as InstanceDataType
+
+	try {
+		await chatsApi.sendMessage(param, instanceData)
+		return param
+	} catch (err) {
+		return rejectWithValue(err)
 	}
 })
 
@@ -57,6 +72,13 @@ export const slice = createSlice({
 		})
 		builder.addCase(fetchMessages.fulfilled, (state, action) => {
 			state.currentChat = { phoneNumber: +action.payload.phoneNumber, messages: action.payload.messages }
+		})
+		builder.addCase(sendMessage.fulfilled, (state, action) => {
+			state.currentChat.messages.push({
+				...state.currentChat.messages[0],
+				textMessage: action.payload.message,
+				type: 'outgoing'
+			})
 		})
 	}
 })

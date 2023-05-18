@@ -1,7 +1,7 @@
 import { instance } from 'common/constants'
 import { InstanceDataType } from 'modules/loginModule'
 import { AxiosResponse } from 'axios'
-import { MessageType } from 'modules/chatsModule/types'
+import { MessageType, SendMessageType } from 'modules/chatsModule/types'
 
 export const chatsApi = {
 	checkNumber(phoneNumber: number, instanceData: InstanceDataType) {
@@ -17,5 +17,10 @@ export const chatsApi = {
 			chatId: string
 		}>(`waInstance${idInstance}/GetChatHistory/${apiTokenInstance}`, { chatId })
 			.then(res => res.data)
+	},
+	sendMessage(messageData: SendMessageType, instanceData: InstanceDataType) {
+		const { idInstance, apiTokenInstance } = instanceData
+		return instance.post<'', AxiosResponse,
+			SendMessageType>(`waInstance${idInstance}/SendMessage/${apiTokenInstance}`, messageData)
 	}
 }

@@ -43,6 +43,5 @@ const slice = createSlice({
 		})
 	}
 })
-
 export const {removeInstanceData } = slice.actions
 export const loginReducer = slice.reducer

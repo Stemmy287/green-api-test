@@ -1,0 +1,16 @@
+@import "common/styles/mixins.scss";
+@import "common/styles/variables.scss";
+
+.container {
+  max-width: 300px;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: $green400;
+  @include text(400, 13px, normal, $dark500);
+  box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .2);
+  align-self: end;
+}
+.incoming {
+  align-self: start;
+  background-color: $light100;
+}

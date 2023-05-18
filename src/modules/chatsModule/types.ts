@@ -24,3 +24,8 @@ export type MessageType = {
 	downloadUrl: string
 	caption: string
 }
+
+export type SendMessageType = {
+	chatId: string
+	message: string
+}
