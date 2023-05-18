@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware, { ThunkDispatch } from 'redux-thunk'
 import { loginReducer } from 'modules/loginModule'
 import { chatsSlice } from 'modules/chatsModule'
-import { appReducer } from 'app'
+import { appReducer } from 'app/appSlice'
 
 const rootReducer = combineReducers({
 	app: appReducer,
