@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { InstanceDataType, loginApi } from 'modules/loginModule'
+import { setIsInitialized } from 'app'
 
 export const loginTC = createAsyncThunk('login/loginTC', async (param: InstanceDataType, {
 	dispatch,
@@ -25,14 +26,10 @@ const slice = createSlice({
 	initialState: {
 		instanceData: null as InstanceDataType | null,
 		isLoggedIn: false,
-		isInitialized: false
 	},
 	reducers: {
 		setIsLoggedIn(state, action: PayloadAction<boolean>) {
 			state.isLoggedIn = action.payload
-		},
-		setIsInitialized(state) {
-			state.isInitialized = true
 		},
 		setInstanceData(state, action: PayloadAction<InstanceDataType>) {
 			state.instanceData = action.payload
@@ -49,7 +46,6 @@ const slice = createSlice({
 export const {
 	setInstanceData,
 	removeInstanceData,
-	setIsLoggedIn,
-	setIsInitialized
+	setIsLoggedIn
 } = slice.actions
 export const loginReducer = slice.reducer

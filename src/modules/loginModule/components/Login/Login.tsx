@@ -36,7 +36,6 @@ export const Login = () => {
 	}
 
 	return (
-
 		<div className={s.container}>
 			<div className={s.info}>
 						<span>
@@ -48,7 +47,7 @@ export const Login = () => {
 							>
 								{' green-api.com '}
 							</a>
-						 	и создать инстанс
+						 	, создать инстанс и авторизовать его
 						</span>
 				<span><b>idInstance</b> и <b>apiTokenInstance</b> введите ниже в форму</span>
 			</div>
