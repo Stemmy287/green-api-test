@@ -1,0 +1,40 @@
+@import "common/styles/mixins.scss";
+@import "common/styles/variables.scss";
+
+.container {
+  display: flex;
+  padding: 10px;
+  column-gap: 15px;
+  border-bottom: 1px solid $dark100;
+
+  &:hover {
+    background-color: $dark400;
+    cursor: pointer;
+  }
+
+  > img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 3px;
+
+    .mobileNumber {
+
+    }
+
+    .messageEmpty {
+      color: $dark200
+    }
+  }
+
+}
+
+.current {
+  background-color: $dark400;
+}
