@@ -3,6 +3,8 @@ import s from './ChatWindow.module.scss'
 import { Button, Input } from 'common/components'
 import { useAppDispatch, useAppSelector } from 'hooks'
 import { currentChatSelector, MappedMessages, sendMessage } from 'modules/chatsModule'
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
+import 'overlayscrollbars/overlayscrollbars.css'
 
 export const ChatWindow = () => {
 
@@ -20,9 +22,11 @@ export const ChatWindow = () => {
 		<div className={s.chatWindow}>
 			{currentChat.phoneNumber ? (
 					<>
-						<div className={s.messages}>
-							<MappedMessages currentChat={currentChat} />
-						</div>
+						<OverlayScrollbarsComponent className={s.scroll} defer>
+							<div className={s.messages}>
+								<MappedMessages currentChat={currentChat} />
+							</div>
+						</OverlayScrollbarsComponent>
 						<div className={s.addMessage}>
 							<div className={s.input}>
 								<Input
