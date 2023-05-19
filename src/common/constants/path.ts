@@ -3,4 +3,4 @@ export const PATH = {
 	LOGIN: '/login',
 	CHATS: '/chats',
 	NOT_FOUND: '/404'
-} as const
+}
