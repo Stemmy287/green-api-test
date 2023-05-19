@@ -10,7 +10,7 @@ export const MappedMessages = ({ currentChat }: PropsType) => {
 		<>
 			{currentChat.messages?.length
 				? currentChat.messages?.filter(mes => mes.type)
-					.map(mes => <Message message={mes.textMessage} typeMessage={mes.type} />)
+					.map(mes => <Message key={mes.idMessage} message={mes.textMessage} typeMessage={mes.type} />)
 				: <span className={s.emptyMessage}>сообщений пока нет</span>
 			}
 		</>

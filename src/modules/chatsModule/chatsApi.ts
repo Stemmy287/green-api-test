@@ -20,14 +20,13 @@ export const chatsApi = {
 		return instance.post<'', AxiosResponse, SendMessageType>
 		(`waInstance${idInstance}/SendMessage/${apiTokenInstance}`, messageData)
 	},
-	getNotifications(instanceData: InstanceDataType) {
+	getNotification(instanceData: InstanceDataType) {
 		const { idInstance, apiTokenInstance } = instanceData
-		return instance.get
-			< AxiosResponse < NotificationType >>
+		return instance.get<NotificationType>
 			(`waInstance${idInstance}/ReceiveNotification/${apiTokenInstance}`)
 				.then(res => res.data)
 	},
-	deleteNotifications(receiptId: string, instanceData: InstanceDataType) {
+	deleteNotification(receiptId: number, instanceData: InstanceDataType) {
 		const { idInstance, apiTokenInstance } = instanceData
 		return instance.delete< { result: boolean } >
 			(`waInstance${idInstance}/DeleteNotification/${apiTokenInstance}/${receiptId}`)

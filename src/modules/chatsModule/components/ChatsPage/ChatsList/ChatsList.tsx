@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import s from './ChatsList.module.scss'
 import { Button, Input } from 'common/components'
-import { createChat } from 'modules/chatsModule'
+import { createChat, MappedChats } from 'modules/chatsModule'
 import { useAppDispatch } from 'hooks'
-import { MappedChats } from 'modules/chatsModule'
+import 'overlayscrollbars/overlayscrollbars.css'
 
 export const ChatsList = () => {
 

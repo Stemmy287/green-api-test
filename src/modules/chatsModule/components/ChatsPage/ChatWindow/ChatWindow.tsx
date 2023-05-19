@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './ChatWindow.module.scss'
 import { Button, Input } from 'common/components'
 import { useAppDispatch, useAppSelector } from 'hooks'
-import { currentChatSelector, MappedMessages, sendMessage } from 'modules/chatsModule'
+import { currentChatSelector, getMessage, MappedMessages, sendMessage } from 'modules/chatsModule'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import 'overlayscrollbars/overlayscrollbars.css'
 
@@ -16,7 +16,24 @@ export const ChatWindow = () => {
 
 	const onSendMessageHandler = () => {
 		dispatch(sendMessage({ chatId: currentChat.phoneNumber + '@c.us', message: value }))
+		setValue('')
 	}
+
+	useEffect(() => {
+
+		let timerId: number
+
+		if (currentChat.phoneNumber) {
+			timerId = window.setInterval(() => {
+				dispatch(getMessage())
+			}, 5500)
+		}
+
+		return () => {
+			clearInterval(timerId)
+		}
+
+	}, [currentChat, dispatch])
 
 	return (
 		<div className={s.chatWindow}>

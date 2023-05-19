@@ -3,10 +3,11 @@ import { chatsApi, ChatType, SendMessageType } from 'modules/chatsModule'
 import { AppRootStateType } from 'store'
 import { InstanceDataType } from 'modules/loginModule'
 import { loadFromLocalStorage } from 'common/utils'
+import { setIsError } from 'app/appSlice'
 
 
 export const createChat = createAsyncThunk('chats/createChat', async (param: number, {
-	rejectWithValue,
+	dispatch,
 	getState
 }) => {
 
@@ -16,12 +17,16 @@ export const createChat = createAsyncThunk('chats/createChat', async (param: num
 	try {
 		const res = await chatsApi.checkNumber(param, instanceData)
 		if (res.existsWhatsapp) {
-			return param
+			const index = state.chats.chats.findIndex(chat => chat.phoneNumber === param)
+			 if (index === -1) {
+				 return param
+			 }
+			dispatch(setIsError('аккаунта с таким номером уже добавлен в список'))
 		} else {
-			return rejectWithValue(false)
+			dispatch(setIsError('аккаунта с таким номером не существует'))
 		}
 	} catch (err) {
-		return rejectWithValue(false)
+		dispatch(setIsError('Ошибка'))
 	}
 })
 
@@ -56,6 +61,30 @@ export const sendMessage = createAsyncThunk('chats/sendMessage', async (param: S
 	}
 })
 
+export const getMessage = createAsyncThunk('chats/getMessage', async (param, {
+	rejectWithValue,
+	getState
+}) => {
+	const state = getState() as AppRootStateType
+	const instanceData = state.login.instanceData as InstanceDataType
+
+	try {
+		const notification = await chatsApi.getNotification(instanceData)
+		const result = await chatsApi.deleteNotification(notification.receiptId, instanceData)
+		if (result && notification.body.messageData.textMessageData.textMessage) {
+			return {
+				message: notification.body.messageData.textMessageData.textMessage,
+				chatId: notification.body.senderData.chatId,
+				type: notification.body.typeWebhook
+			}
+		} else {
+			rejectWithValue(result)
+		}
+	} catch (e) {
+		rejectWithValue(false)
+	}
+})
+
 const chats = loadFromLocalStorage('chats') || []
 
 export const slice = createSlice({
@@ -67,8 +96,10 @@ export const slice = createSlice({
 	reducers: {},
 	extraReducers: (builder) => {
 		builder.addCase(createChat.fulfilled, (state, action) => {
-			state.chats.unshift({ phoneNumber: action.payload, messages: [] })
-			localStorage.setItem('chats', JSON.stringify(state.chats))
+			if (action.payload) {
+					state.chats.unshift({ phoneNumber: action.payload, messages: [] })
+					localStorage.setItem('chats', JSON.stringify(state.chats))
+			}
 		})
 		builder.addCase(fetchMessages.fulfilled, (state, action) => {
 			state.currentChat = { phoneNumber: +action.payload.phoneNumber, messages: action.payload.messages }
@@ -79,6 +110,15 @@ export const slice = createSlice({
 				textMessage: action.payload.message,
 				type: 'outgoing'
 			})
+		})
+		builder.addCase(getMessage.fulfilled, (state, action) => {
+			if (action.payload && state.currentChat.phoneNumber + '@c.us' === action.payload.chatId) {
+				state.currentChat.messages.push({
+					...state.currentChat.messages[0],
+					textMessage: action.payload.message,
+					type: action.payload.type === 'incomingMessageReceived' ? 'incoming' : 'outgoing'
+				})
+			}
 		})
 	}
 })

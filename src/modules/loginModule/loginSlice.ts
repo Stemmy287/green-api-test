@@ -1,21 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { InstanceDataType, loginApi } from 'modules/loginModule'
-import { setIsInitialized } from 'app/appSlice'
+import { setIsError, setIsInitialized } from 'app/appSlice'
 
 export const login = createAsyncThunk('login/login', async (param: InstanceDataType, {
-	dispatch,
-	rejectWithValue
+	dispatch
 }) => {
 	try {
 		const res = await loginApi.checkInstance(param)
 		if (res.stateInstance === 'authorized') {
 			return param
 		} else {
-			return rejectWithValue(res.stateInstance)
+			dispatch(setIsError(res.stateInstance))
 		}
 	} catch (err) {
-		return rejectWithValue(err)
-	} finally {
+		dispatch(setIsError('Проверьте сотояние инстанса'))
+} finally {
 		dispatch(setIsInitialized())
 	}
 })
