@@ -2,16 +2,18 @@ import React, { useEffect } from 'react'
 import './App.scss'
 import { Pages } from 'pages'
 import { useAppDispatch, useAppSelector } from 'hooks'
-import { isInitializedSelector } from 'app/appSelectors'
+import { isErrorSelector, isInitializedSelector } from 'app/appSelectors'
 import { setIsInitialized } from 'app/appSlice'
 import { Preloader } from 'common/components'
 import { login } from 'modules/loginModule'
+import { ErrorBar } from 'common/components/ErrorBar/ErrorBar'
 
 export const App = () => {
 
 	const dispatch = useAppDispatch()
 
 	const isInitialized = useAppSelector(isInitializedSelector)
+	const isError = useAppSelector(isErrorSelector)
 
 	useEffect(() => {
 		const instanceData = localStorage.getItem('instanceData')
@@ -26,5 +28,10 @@ export const App = () => {
 		return <Preloader/>
 	}
 
-	return <Pages />
+	return (
+		<>
+			<Pages />
+			{isError && <ErrorBar/>}
+		</>
+	)
 }
