@@ -18,9 +18,6 @@ export const Chat = ({ mobileNumber }: PropsType) => {
 				<span className={s.mobileNumber}>
 					{mobileNumber}
 				</span>
-				<span className={s.messageEmpty}>
-					сообщений пока нет
-				</span>
 			</div>
 		</div>
 	)
